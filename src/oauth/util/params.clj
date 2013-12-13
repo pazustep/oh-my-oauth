@@ -21,8 +21,3 @@
             (if (= (count rest) 0) ; end of input
               params
               (recur rest tail-re params))))))))
-
-;; The following string:
-;;    "realm=\"testrealm@host.com\",qop=\"auth,auth-int\",nonce=\"dcd98b7102dd\\\"2f0e8b11d0f600bfb0c093\",opaque=\"5ccc069c403ebaf9f0171e9517f40e41\""
-;; Should parse into:
-;;    {"opaque" "5ccc069c403ebaf9f0171e9517f40e41", "nonce" "dcd98b7102dd\\\"2f0e8b11d0f600bfb0c093", "qop" "auth,auth-int", "realm" "testrealm@host.com"}
