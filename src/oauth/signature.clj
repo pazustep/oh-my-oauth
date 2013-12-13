@@ -43,16 +43,17 @@
     (if (= "oauth" (str/lower-case scheme))
       (:params auth))))
 
-(defn upcase-method
+(defn- upcase-method
   "Returns the upcase method from a ring request, like GET or POST. This is
   the first part in an OAuth signature base string."
   [request]
   (str/upper-case (name (:request-method request))))
 
-(def default-ports {:http 80 :https 443})
+(def ^:private default-ports {:http 80 :https 443})
 
-(defn default-port? [request]
-  (= (get default-ports (:scheme request)) (:server-port request)))
+(defn- default-port? [{:keys [scheme server-port]}]
+  (or (nil? server-port)
+      (= (get default-ports scheme) server-port)))
 
 (defn base-uri
   "Returns the base string URI from a ring request map.
@@ -99,7 +100,7 @@
        (map percent-encode)
        (str/join "&")))
 
-(def hmac-sha1-algorithm "HmacSHA1")
+(def ^:private hmac-sha1-algorithm "HmacSHA1")
 
 (defn hmac-sha1-signature
   "Computes a HMAC-SHA1 signature for `text-base`, using `consumer-secret`

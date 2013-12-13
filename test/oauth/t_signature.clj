@@ -42,12 +42,18 @@
 
 (fact "`base-uri` correctly derives the base string URI from a request"
   (sig/base-uri
-    {:request-method :get
-     :scheme :http
+    {:scheme :http
      :server-name "EXAMPLE.COM"
      :server-port 80
      :uri "/r%20v/X"})
   => "http://example.com/r%20v/X")
+
+(fact "`base-uri` should handle a missing server port"
+  (sig/base-uri
+    {:scheme :http
+     :server-name "EXAMPLE.COM"
+     :uri "/path"})
+  => "http://example.com/path")
 
 ;; Example used in RFC 5849
 (def req1
