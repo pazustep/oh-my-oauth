@@ -64,6 +64,24 @@
        (if (default-port? request) "" (str ":" server-port))
        uri))
 
+(def ^:private valid-protocol-params
+  #{"oauth_consumer_key"
+    "oauth_token"
+    "oauth_signature_method"
+    "oauth_signature"
+    "oauth_timestamp"
+    "oauth_nonce"
+    "oauth_version"})
+
+(defn oauth-params
+  "Returns a map of all OAuth protocol parameters present in the provided
+  request. The parameters are collected from the `Authorization` header and
+  the :params key."
+  [request]
+  (-> request
+      (oauth-authorization-params)
+      (merge (select-keys (:params request) valid-protocol-params))))
+
 (defn normalized-parameters
   "Returns the normalized parameters from a ring request map, as a String.
   Parameters are obtained from the `:params` key (encompassing both query
