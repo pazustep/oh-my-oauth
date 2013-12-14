@@ -1,6 +1,6 @@
-(ns oauth.util.t-params
+(ns oh-my-oauth.util.t-params
   (:use midje.sweet)
-  (:require [oauth.util.params :refer [parse-params]]))
+  (:require [oh-my-oauth.util.params :refer [parse-params]]))
 
 (fact
   "`parse-params` should correctly parse a parameter list"

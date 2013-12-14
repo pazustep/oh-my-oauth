@@ -1,6 +1,6 @@
-(ns oauth.util.t-encoding
+(ns oh-my-oauth.util.t-encoding
   (:use midje.sweet)
-  (:require [oauth.util.encoding :refer [percent-encode]]))
+  (:require [oh-my-oauth.util.encoding :refer [percent-encode]]))
 
 (fact
   "`percent-encode` should not encode safe characters"

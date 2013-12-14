@@ -1,6 +1,6 @@
-(ns oauth.t_signature
+(ns oh-my-oauth.t_signature
   (:use midje.sweet)
-  (:require [oauth.signature :as sig]))
+  (:require [oh-my-oauth.signature :as sig]))
 
 (fact "`parse-authorization` can parse an Authorization header into a clojure map"
   ;; Basic

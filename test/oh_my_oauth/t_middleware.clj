@@ -1,6 +1,6 @@
-(ns oauth.t-middleware
+(ns oh-my-oauth.t-middleware
   (use midje.sweet)
-  (require [oauth.middleware :refer [default-nonce-validator wrap-oauth]]))
+  (require [oh-my-oauth.middleware :refer [default-nonce-validator wrap-oauth]]))
 
 (def valid-request
   {:request-method :post

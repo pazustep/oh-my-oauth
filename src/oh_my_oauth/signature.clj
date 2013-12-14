@@ -1,11 +1,11 @@
-(ns oauth.signature
+(ns oh-my-oauth.signature
   (:import (javax.crypto Mac)
            (javax.crypto.spec SecretKeySpec))
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [ring.util.codec :as codec]
-            [oauth.util.params :refer [parse-params]]
-            [oauth.util.encoding :refer [percent-encode]]))
+            [oh-my-oauth.util.params :refer [parse-params]]
+            [oh-my-oauth.util.encoding :refer [percent-encode]]))
 
 (defn- auth-params
   "Returns the parameters for an `Authorization` header. This tries to parse

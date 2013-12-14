@@ -1,7 +1,7 @@
-(ns oauth.middleware
+(ns oh-my-oauth.middleware
   (:require [clojure.string :as str]
             [ring.util.codec :as codec]
-            [oauth.signature :as sig]))
+            [oh-my-oauth.signature :as sig]))
 
 (def ^:private signature-checkers
   {"hmac-sha1" sig/hmac-sha1-signature})

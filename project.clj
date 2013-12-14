@@ -1,4 +1,4 @@
-(defproject oh-my-auth "0.1.0-SNAPSHOT"
+(defproject oh-my-oauth "0.1.0-SNAPSHOT"
   :description "A ring middleware to support OAuth 1.0a authentication"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"

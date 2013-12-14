@@ -1,4 +1,4 @@
-(ns oauth.util.params)
+(ns oh-my-oauth.util.params)
 
 ;; From RFC 2616, section 2.2: token "=" quoted-string
 (def ^:private head-re #"([^\p{Cntrl}()<>@,;:\\\"\/\[\]?={} \t]+)=\"((?:[^\"\\]|\\.)*)\"")

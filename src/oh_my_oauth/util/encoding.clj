@@ -1,4 +1,4 @@
-(ns oauth.util.encoding
+(ns oh-my-oauth.util.encoding
   "Functions dealing with OAuth percent encoding, as defined in section 3.6
   of the specification"
   (:require [clojure.string :refer [escape]]))
