@@ -11,42 +11,70 @@ request handlers to perform OAuth authentication. The middleware function
 takes a number of options to control its behavior.
 
     :consumer-secret-fn - a function to lookup the shared secret for a given
-                          consumer key. The function takes the consumer key
-                          as its only parameter and should return the
-                          corresponding consumer secret, or nil if it can't
-                          be found. This option is required.
+                          consumer key. Its signature should look like this:
+
+                            (defn find-consumer-secret [consumer-key] ...)
+
+                          It should return the consumer secret for the given
+                          key. This option is required.
 
     :token-secret-fn    - a function to lookup the shared secret for a given
-                          token. It takes the token as its only parameter and
-                          should return the token secret, or nil if it can't
-                          be found. If this option isn't provided, the
-                          middleware will try to verify requests using only
-                          the consumer secret (0-legged OAuth).
+                          token. Its signature should look like this:
 
-    :error-handler-fn   - a function to handle authentication errors. This
-                          function is called with the original handler, the
-                          current request and an error details map as
-                          parameters, if there's an authentication error in
-                          the request. The default is the
-                          `default-error-handler` function in this namespace,
-                          that responds immediately with an error. You can
-                          also use `passthrough-error-handler` or your own
-                          function.
+                            (defn find-token-secret [token] ...)
+
+                          It should return the token secret. If this option
+                          isn't provided, the middleware will try to verify
+                          requests using only the consumer secret (0-legged
+                          OAuth).
+
+    :error-handler-fn   - a function to handle authentication errors. Its
+                          signature should look like this:
+
+                            (defn handle-errors [handler request details] ...)
+
+                          Where `handler` is the original handler function
+                          being wrapped by this middleware; `request` is the
+                          request being currently handled, and `details` is
+                          a map with information about why the request failed
+                          to authenticate. This maps contains three keys:
+
+                            :error   - a keyword identifying exactly what went
+                                       wrong during authentication.
+                            :status  - a (proposed) HTTP status code to use in
+                                       the response.
+                            :message - a (proposed) error message to use in
+                                       the resonse.
+
+                          The default is the `default-error-handler` function
+                          in this namespace. It responds immediately using the
+                          `:status` key as the response status, and the
+                          `:message` for the body.
+
+                          As an alternative, the `passthrough-error-handler`
+                          function allows the request to proceed, adding the
+                          error details map to the `:oauth-error` key in the
+                          request.
 
     :nonce-validator-fn - a function to validate nonce and timestamp values
-                          for an authentication request. The function should
-                          take four parameters: the nonce, timestamp, consumer
-                          key and token. This function is only called after
-                          the request has been checked for required OAuth
-                          parameters, so the first three are guaranteed to be
-                          non-nil. All values are strings. The default value
-                          for this option is the `default-nonce-validator`,
-                          that checks if timestamps are at most from one hour
-                          ago.
+                          for an authentication request. Its signature should
+                          look like this:
 
-  If this middleware is not correctly configured (right now this means a
-  missing :consumer-secret-fn option), all requests that pass through it will
-  return a 500 response.
+                            (defn validate-nonce [nonce timestamp consumer-key token] ...)
+
+                          This function is called after the request has been
+                          checked for required parameters, so the first three
+                          are guaranteed to be non-nil. All values are strings.
+
+                          The default value for this option is the
+                          `default-nonce-validator`, that checks if timestamps
+                          are at most from one hour ago, ignoring all other
+                          parameters.
+
+If the middleware is not correctly configured (right now this means a
+missing `:consumer-secret-fn` option), all wrapped requests will return a
+HTTP 500 response and a message explaining the configuration problem as
+its body."
 
 ## License
 

@@ -197,7 +197,7 @@
                           parameters.
 
   If the middleware is not correctly configured (right now this means a
-  missing :consumer-secret-fn option), all wrapped requests will return a
+  missing `:consumer-secret-fn` option), all wrapped requests will return a
   HTTP 500 response and a message explaining the configuration problem as
   its body."
   [handler & {:as opts}]
