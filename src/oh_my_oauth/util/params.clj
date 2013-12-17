@@ -1,4 +1,5 @@
-(ns oh-my-oauth.util.params)
+(ns oh-my-oauth.util.params
+  (:require [ring.util.codec :refer [percent-decode]]))
 
 ;; From RFC 2616, section 2.2: token "=" quoted-string
 (def ^:private head-re #"([^\p{Cntrl}()<>@,;:\\\"\/\[\]?={} \t]+)=\"((?:[^\"\\]|\\.)*)\"")
@@ -15,7 +16,7 @@
     (loop [input input regex head-re params nil]
       (let [matcher (re-matcher regex input)]
         (if (.lookingAt matcher)
-          (let [kv (rest (re-groups matcher))
+          (let [kv (map percent-decode (rest (re-groups matcher)))
                 params (apply assoc params kv)
                 rest (subs input (.end matcher))]
             (if (= (count rest) 0) ; end of input

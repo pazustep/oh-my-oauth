@@ -39,7 +39,7 @@
   (let [auth (-> (:headers request)
                  (get "authorization")
                  (parse-authorization))
-        scheme (:scheme auth)]
+        scheme (get auth :scheme "")]
     (if (= "oauth" (str/lower-case scheme))
       (:params auth))))
 
@@ -127,7 +127,7 @@
   resulting bytes are then base64 encoded and returned. You can use
   `signature-base` to obtain the text base for a OAuth request."
   [text-base consumer-secret token-secret]
-  (let [keystr (->> [consumer-secret token-secret] (map percent-encode) (str/join "&"))
+  (let [keystr (->> [consumer-secret token-secret] (map (fnil percent-encode "")) (str/join "&"))
         keyspec (SecretKeySpec. (.getBytes keystr) hmac-sha1-algorithm)
         mac (Mac/getInstance hmac-sha1-algorithm)]
     (doto mac

@@ -62,7 +62,7 @@
         token (params "oauth_token")
         token-secret (token-secret-fn token)
         sig-checker (signature-checkers (str/lower-case (params "oauth_signature_method")))
-        request-sig (codec/percent-decode (params "oauth_signature"))
+        request-sig (params "oauth_signature")
         computed-sig (sig-checker base-string consumer-secret token-secret)]
     (if (= request-sig computed-sig)
       [true {:oauth-consumer-key consumer-key

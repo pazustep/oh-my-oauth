@@ -51,6 +51,13 @@
                   "oauth_version=\"1.0\","
                   "oauth_signature=\"blablabla\"")}})
 
+(def no-authorization-request
+  {:request-method :post
+   :scheme :https
+   :server-name "api.twitter.com"
+   :server-port 443
+   :uri "/1/statuses/update.json"})
+
 (def consumer-secret-fn (constantly "kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw"))
 
 (def token-secret-fn (constantly "LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE"))
@@ -88,9 +95,13 @@
     (wrapped valid-request) => (contains {:status 200}))
 
   (fact
-    "`wrap-oauth complains about missing parameters."
+    "`wrap-oauth` handles a non-OAuth request by returning 400."
+    (wrapped no-authorization-request) => (contains {:status 400}))
+
+  (fact
+    "`wrap-oauth` complains about missing parameters."
     (wrapped missing-params-request) => (contains {:status 400}))
 
   (fact
-    "`wrap-oauth complains about invalid signatures."
+    "`wrap-oauth` complains about invalid signatures."
     (wrapped invalid-signature-request) => (contains {:status 401})))

@@ -1,7 +1,8 @@
 (ns oh-my-oauth.util.encoding
   "Functions dealing with OAuth percent encoding, as defined in section 3.6
   of the specification"
-  (:require [clojure.string :refer [escape]]))
+  (:require [clojure.string :refer [escape]]
+            [clojure.set :refer [union]]))
 
 (def ^:private safe-chars
   "A set with all characters considered safe from OAuth percent encoding.
@@ -11,7 +12,7 @@
         range-to-set #(->> % (apply range) (map char) (set))
         range-sets (map range-to-set ranges)
         safe-sets (conj range-sets safe-chars)]
-    (apply clojure.set/union safe-sets)))
+    (apply union safe-sets)))
 
 (defn ^:private encode-char
   "Percent encodes a character, if it's not safe. Returns a string with the
@@ -24,4 +25,3 @@
   "Percent encodes the given string."
   [str]
   (escape str encode-char))
-
